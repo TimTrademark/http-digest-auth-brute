@@ -45,7 +45,7 @@ def execute_lines(lines: List[str], target: str, username: str, realm: str, uri:
                "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8"}
     for l in lines:
         res = requests.get(
-            f"{BASE_URL}/", headers=headers, proxies={"http": "127.0.0.1:8080"}, verify=False)
+            f"{BASE_URL}/", headers=headers, verify=False)
         nonce_header = res.headers.get("WWW-Authenticate")
         nonce = nonce_header.split("nonce=")[1].split("\"")[1]
         cnonce = "8d34ac326d80e093"
@@ -60,8 +60,8 @@ def execute_lines(lines: List[str], target: str, username: str, realm: str, uri:
         updated_headers.update(authorization_header)
         updated_headers.update(headers)
         if method.upper() == 'GET':
-            res = requests.get(f"{BASE_URL}/", headers=updated_headers,
-                               proxies={"http": "127.0.0.1:8080"}, verify=False)
+            res = requests.get(
+                f"{BASE_URL}/", headers=updated_headers, verify=False)
         else:
             raise RuntimeError("Currently only GET is implemented")
         if res.status_code != 401:
