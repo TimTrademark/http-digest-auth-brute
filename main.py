@@ -73,9 +73,9 @@ def execute_lines(lines: List[str], target: str, username: str, realm: str, uri:
 def calc_hash_digest(algo: str, text: str):
     digest = ""
     if algo.lower() == 'md5':
-        hashlib.md5(text.encode()).hexdigest()
+        digest = hashlib.md5(text.encode()).hexdigest()
     elif algo.lower() == 'sha-256' or algo.lower() == 'sha256':
-        hashlib.sha256(text.encode()).hexdigest()
+        digest = hashlib.sha256(text.encode()).hexdigest()
     else:
         raise RuntimeError("Algorithm not supported")
     return digest
