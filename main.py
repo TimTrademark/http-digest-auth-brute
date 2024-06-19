@@ -7,6 +7,8 @@ import time
 import argparse
 import json
 
+requests.packages.urllib3.disable_warnings() 
+
 parser = argparse.ArgumentParser(
     prog='HTTP Digest Auth Brute Forcer', usage='main.py -t https://example.com -f password_list.txt -c 1 --username admin -r realm --uri / --algo MD5 -m GET --json myjsonfile.txt')
 parser.add_argument('-t', '--target')
@@ -22,13 +24,12 @@ parser.add_argument('--json', help="file that contains json data to use with pos
 
 
 async def main(target: str, file: str, concurrent_requests: int, username: str, realm: str, uri: str, method: str, algo: str, json_file: str):
+    print("Starting brute force attack")
+    print("---------------------------")
     with open(f'{file}', 'r') as f:
         lines = f.readlines()
     items_per_chunk = math.floor(len(lines) / concurrent_requests)
     line_chunks = chunks(lines, items_per_chunk)
-    print(len(lines))
-    print(items_per_chunk)
-    print(len(line_chunks))
     loop = asyncio.get_event_loop()
     tasks = []
     json_body = None
