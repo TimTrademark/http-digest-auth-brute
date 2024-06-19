@@ -16,8 +16,8 @@ parser.add_argument('-c', '--concurrent',
 parser.add_argument('-u', '--username')
 parser.add_argument('-r', '--realm')
 parser.add_argument('--uri', '--endpoint', help='The authentication uri')
-parser.add_argument('-a', '--algo')
-parser.add_argument('-m', '--method')
+parser.add_argument('-a', '--algo', help="MD5 or SHA256")
+parser.add_argument('-m', '--method', help="GET OR POST (json)")
 parser.add_argument('--json', help="file that contains json data to use with post request", default="")
 
 
@@ -60,7 +60,7 @@ def execute_lines(lines: List[str], target: str, username: str, realm: str, uri:
         elif method.upper() == 'POST':
             headers.update({"Content-Type": "application/json"})
             res = requests.post(
-                f"{BASE_URL}", json=json.loads(json_body), proxies={'https': '127.0.0.1:8080'}, headers=headers, verify=False)
+                f"{BASE_URL}", json=json.loads(json_body), headers=headers, verify=False)
         else:
             raise RuntimeError("Currently only GET and POST is implemented")
         nonce_header = None
@@ -85,7 +85,7 @@ def execute_lines(lines: List[str], target: str, username: str, realm: str, uri:
             res = requests.get(
                 f"{BASE_URL}", headers=updated_headers, verify=False)
         elif method.upper() == 'POST':
-            res = requests.post(f"{BASE_URL}", json=json.loads(json_body), proxies={'https': '127.0.0.1:8080'}, headers=updated_headers, verify=False)
+            res = requests.post(f"{BASE_URL}", json=json.loads(json_body), headers=updated_headers, verify=False)
         else:
             raise RuntimeError("Currently only GET and POST is implemented")
         if res.status_code > 200 and res.status_code < 400:
